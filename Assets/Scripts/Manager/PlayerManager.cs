@@ -92,7 +92,7 @@ public class PlayerManager : MonoBehaviour
 				Wenzil.Console.Console.Log ("Authentication failed Something went wrong.. Connect to Internet");
 				// Restart the level..
 				 
-				 
+				//  PlayFabClientAPI.IsClientLoggedIn()
 			}
 	});
 	}
@@ -118,11 +118,13 @@ public class PlayerManager : MonoBehaviour
 			{
 				Wenzil.Console.Console.Log("(new account)");
 				//SetPlayerData();
+				GetPlayerDataJsonFromServer();
 			}
 			else
 			{
 				Wenzil.Console.Console.Log("(existing account)");
 				//SetPlayerData();
+				GetPlayerDataJsonFromServer();
 			}
     }
 
@@ -138,23 +140,23 @@ public class PlayerManager : MonoBehaviour
 
 	void CheckAndLoadFromLocalStorage()
 	{
-		playerJson = GetPlayerDataFromLocal();
+		playerJson = GetPlayerDataJsonFromLocal();
 		Wenzil.Console.Console.Log("Player data Json" + playerJson);
 		if(String.IsNullOrEmpty(playerJson))
 		{
 			Wenzil.Console.Console.Log("player json is empty so contacting server");
 			 
-			GetPlayerDataFromServer();// loading data from server
+			GetPlayerDataJsonFromServer();// loading data from server
 		}
 		else
 		{
 			 player = JsonUtility.FromJson<Player>(playerJson);
-			 PuppyManager.Instance.GetPuppyDataFromLocal();  //load puppy data from local
+			 PuppyManager.Instance.GetPuppyDataJsonFromLocal();  //load puppy data from local
 			  
 		}
 	}
 
-	public void SetPlayerDataToLocal()
+	public void SetPlayerDataJsonToLocal()
 	{
 		 
 		PlayerPrefs.SetString("PlayerData",playerJson);
@@ -162,7 +164,7 @@ public class PlayerManager : MonoBehaviour
 		Debug.Log("Player Data saved locally");
 	 
 	}
-	public string GetPlayerDataFromLocal()
+	public string GetPlayerDataJsonFromLocal()
 	{
 		return PlayerPrefs.GetString("PlayerData");		 
 	}
@@ -172,7 +174,7 @@ public class PlayerManager : MonoBehaviour
 
 	}
 
-	public void SetPlayerDataToServer()
+	public void SetPlayerJsonDataToServer()
 	{ 	 
 		 
 		playerJson = JsonUtility.ToJson(player); 
@@ -197,7 +199,7 @@ public class PlayerManager : MonoBehaviour
 
 	 
 	 
-	public void GetPlayerDataFromServer()
+	public void GetPlayerDataJsonFromServer()
 	{
 		GetUserDataRequest request = new GetUserDataRequest()
 		{
@@ -219,9 +221,11 @@ public class PlayerManager : MonoBehaviour
 					Wenzil.Console.Console.Log("    " + item.Key + " == " + item.Value.Value);
 					if(item.Key.Contains("PlayerData"))
 					{
-						playerJson2 = item.Value.Value;
+						playerJson = item.Value.Value;
 					}
 				}
+				 //UpdateJson();
+				 GetCurrency();
 			}
 		}, (error) => {
 			Wenzil.Console.Console.Log("Got error retrieving user data:");
@@ -260,6 +264,8 @@ public class PlayerManager : MonoBehaviour
 			VirtualCurrency = result.VirtualCurrency;
 			player.puppyCoins = VirtualCurrency["PC"];
 			GlobalVariables.TotalCoins = player.puppyCoins;
+			UpdateJson();
+			Debug.Log("Currency retrieved and save to Json");
 			
 		}, (error) =>
 		{
@@ -269,16 +275,14 @@ public class PlayerManager : MonoBehaviour
 	}
 
  
-	
+	public void UpdateJson()
+	{
+		 JsonUtility.FromJson<Player>(playerJson);
+	}
 
   
 
-	void OnPlayFabError(PlayFabError error)
-	{
-		Debug.Log ("Got an error: " + error.ErrorMessage);
-	}
- 
-	
+	 
 	 
 
 	

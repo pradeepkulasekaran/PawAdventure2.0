@@ -88,7 +88,7 @@ public class PuppyManager : MonoBehaviour
 		
 	}
 
-	public void GetPuppyDataToServer(int puppyID)
+	public void GetPuppyDataJsonToServer(int puppyID)
 	{
 		Debug.Log("ID" + PlayerManager.Instance.player.playFabID);
 		switch(puppyID)
@@ -138,7 +138,7 @@ public class PuppyManager : MonoBehaviour
 		} 
 	}
 
-	public void SetPuppyDataToServer(int puppyID)
+	public void SetPuppyDataJsonToServer(int puppyID)
 	{ 	 
 
 		switch(puppyID)
@@ -182,7 +182,7 @@ public class PuppyManager : MonoBehaviour
 		
 	}
 
-	public void GetPuppyDataFromLocal()
+	public void GetPuppyDataJsonFromLocal()
 	{
 		Wenzil.Console.Console.Log("Puppy Data loaded from local");
 		Debug.Log("Puppy Data Loaded From Local");
@@ -227,7 +227,7 @@ public class PuppyManager : MonoBehaviour
 		}
 	}
 
-	public void SetPuppyDataToLocal()
+	public void SetPuppyDataJsonToLocal()
 	{
 		PlayerPrefs.SetString("BeagleData", beagleJson);
 		PlayerPrefs.SetString("BullDogData", bullJson);
