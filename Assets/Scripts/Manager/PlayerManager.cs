@@ -53,7 +53,7 @@ public class PlayerManager : MonoBehaviour
 	void Start () 
 	{
 		AuthenticatePlayer();
- 	 
+ 	 Debug.Log(PlayFabClientAPI.IsClientLoggedIn());
 	}
 
     void AuthenticatePlayer()
@@ -72,7 +72,9 @@ public class PlayerManager : MonoBehaviour
 				player.playerName = UnityEngine.Social.localUser.userName;
 				Wenzil.Console.Console.Log("PlayerName "+ player.playerName);
 				Wenzil.Console.Console.Log("PlayerID "+ player.playerID);
+				
 				LoginWithPlayFab();
+					 
 				// if(String.IsNullOrEmpty(player.playerID))
 				// {
 				// 	// connect to net
@@ -92,7 +94,7 @@ public class PlayerManager : MonoBehaviour
 				Wenzil.Console.Console.Log ("Authentication failed Something went wrong.. Connect to Internet");
 				// Restart the level..
 				 
-				//  PlayFabClientAPI.IsClientLoggedIn()
+				//  
 			}
 	});
 	}
@@ -126,6 +128,7 @@ public class PlayerManager : MonoBehaviour
 				//SetPlayerData();
 				GetPlayerDataJsonFromServer();
 			}
+			Debug.Log(PlayFabClientAPI.IsClientLoggedIn());
     }
 
     private void OnLoginFailure(PlayFabError error)
